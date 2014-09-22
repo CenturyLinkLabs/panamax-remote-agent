@@ -20,7 +20,7 @@ class Deployment < ActiveRecord::Base
   end
 
   def self.adapter_client
-    PanamaxAgent.adapter_client
+    OrchestrationAdapter.new
   end
   private_class_method :adapter_client
 
