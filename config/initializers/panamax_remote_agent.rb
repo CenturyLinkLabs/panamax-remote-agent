@@ -1,0 +1,4 @@
+module PanamaxRemoteAgent
+  USERNAME = ENV['REMOTE_AGENT_ID']
+  PASSWORD = ENV['REMOTE_AGENT_API_KEY']
+end
