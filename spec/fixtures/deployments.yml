@@ -1,0 +1,5 @@
+deployment1:
+  service_ids: |
+    ---
+    - service1
+    - service2
