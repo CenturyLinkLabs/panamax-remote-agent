@@ -6,7 +6,9 @@ class Deployment < ActiveRecord::Base
 
   class << self
 
-    def deploy(template)
+    def deploy(template, override)
+      template.override(override)
+
       services = services_from_template(template)
       deployed_services = adapter_client.create_services(services)
 
@@ -15,11 +17,8 @@ class Deployment < ActiveRecord::Base
 
     private
 
-    include ImageConverter
-
     def services_from_template(template)
-      images = YAML.safe_load(template)['images']
-      images.map { |image| image_to_service(image) }
+      template.images.map { |image| ImageSerializer.new(image) }
     end
 
     def service_ids(services)
