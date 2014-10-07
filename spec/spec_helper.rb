@@ -42,3 +42,7 @@ RSpec.configure do |config|
 
   config.global_fixtures = :all
 end
+
+def deep_copy(o)
+  Marshal.load(Marshal.dump(o))
+end
