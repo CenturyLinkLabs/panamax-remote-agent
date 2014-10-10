@@ -14,35 +14,51 @@ describe Deployment do
   describe '.deploy' do
 
     let(:template) { "images:\n- name: a\n  source: b\n- name: c\n  source: d" }
+    let(:template) do
+      Template.new(
+        'images' => [{ 'name' => 'image1' }, { 'name' => 'image2' }]
+      )
+    end
+
+    let(:override) do
+      Template.new(
+        'images' => [{ 'name' => 'image1', 'deployment' => { 'count' => 2 } }]
+      )
+    end
+
     let(:deployed_services) { [{ 'id' => 'a.svc' }, { 'id' => 'b.svc' }] }
 
     before do
       client.stub(:create_services).and_return(deployed_services)
     end
 
+    it 'overrides the template with the deployment descriptor' do
+      expect(template).to receive(:override).with(override)
+      described_class.deploy(template, override)
+    end
+
     it 'calls create_services on the client' do
-      services = [
-        { 'name' => 'a', 'source' => 'b' },
-        { 'name' => 'c', 'source' => 'd' }
-      ]
+      expect(client).to receive(:create_services) do |services|
+        expect(services).to have(template.images.count).items
+        expect(services.first).to be_kind_of ImageSerializer
+        deployed_services
+      end
 
-      expect(client).to receive(:create_services).with(services)
-
-      described_class.deploy(template)
+      described_class.deploy(template, override)
     end
 
     it 'returns a Deployment instance' do
-      deployment = described_class.deploy(template)
+      deployment = described_class.deploy(template, override)
       expect(deployment).to be_a Deployment
     end
 
     it 'populates the service IDs in the Deployment instance' do
-      deployment = described_class.deploy(template)
+      deployment = described_class.deploy(template, override)
       expect(deployment.service_ids).to eq ['a.svc', 'b.svc']
     end
 
     it 'persists the Deployment instance' do
-      expect(described_class.deploy(template).persisted?).to eq true
+      expect(described_class.deploy(template, override).persisted?).to eq true
     end
   end
 

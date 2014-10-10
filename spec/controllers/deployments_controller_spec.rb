@@ -36,24 +36,30 @@ describe DeploymentsController do
 
   describe '#create' do
 
-    let(:template) { 'sometemplate' }
+    let(:template) { { 'name' => 'template1' } }
+    let(:override) { { 'name' => 'deployment1' } }
 
     before do
       Deployment.stub(:deploy).and_return(deployment)
     end
 
     it 'deploys the template' do
-      expect(Deployment).to receive(:deploy).with(template)
-      post :create, template: template, format: :json
+      expect(Deployment).to receive(:deploy) do |t,d|
+        expect(t.name).to eq template['name']
+        expect(d.name).to eq override['name']
+        deployment
+      end
+
+      post :create, template: template, override: override, format: :json
     end
 
     it 'returns the new deployment' do
-      post :create, template: template, format: :json
+      post :create, template: template, override: override, format: :json
       expect(response.body).to eq deployment.to_json
     end
 
     it 'returns a 204 status code' do
-      post :create, template: template, format: :json
+      post :create, template: template, override: override, format: :json
       expect(response.status).to eq 201
     end
   end

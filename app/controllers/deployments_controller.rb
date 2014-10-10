@@ -12,7 +12,10 @@ class DeploymentsController < ApplicationController
   end
 
   def create
-    respond_with Deployment.deploy(params[:template])
+    template = Template.new(params[:template])
+    override = Template.new(params[:override])
+
+    respond_with Deployment.deploy(template, override)
   end
 
   def destroy
