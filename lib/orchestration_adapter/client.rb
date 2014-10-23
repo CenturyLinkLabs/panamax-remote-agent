@@ -1,6 +1,7 @@
 module OrchestrationAdapter
   class Client
     include Services
+    include Metadata
 
     attr_reader :connection
 
