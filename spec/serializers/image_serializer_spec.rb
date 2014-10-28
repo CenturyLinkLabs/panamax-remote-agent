@@ -4,6 +4,9 @@ describe ImageSerializer do
 
   let(:image) do
     Image.new(
+      'links' => [
+        { 'service' => 'a', 'alias' => 'b' }
+      ],
       'ports' => [
         { 'container_port' => 1111, 'host_port' => 2222, 'proto' => 'UDP' }
       ],
@@ -38,6 +41,16 @@ describe ImageSerializer do
       )
 
       expect(serialized.keys).to match_array expected_keys
+    end
+
+    it 're-maps the keys for any links' do
+      serialized = subject.as_json
+
+      expect(serialized[:links].count).to eq 1
+      link = serialized[:links].first
+
+      expect(link[:name]).to eq image.links.first['service']
+      expect(link[:alias]).to eq image.links.first['alias']
     end
 
     it 're-maps the keys for any ports' do

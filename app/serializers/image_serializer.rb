@@ -4,6 +4,15 @@ class ImageSerializer < ActiveModel::Serializer
   attributes :name, :source, :categories, :command, :environment, :links,
     :expose, :ports, :volumes, :volumesFrom, :deployment
 
+  def links
+    object.links.map do |link|
+      {}.tap do |h|
+        h[:name] = link['service']
+        h[:alias] = link['alias']
+      end
+    end
+  end
+
   def ports
     object.ports.map do |port|
       {}.tap do |h|
