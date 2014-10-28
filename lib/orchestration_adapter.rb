@@ -11,7 +11,7 @@ module OrchestrationAdapter
     end
 
     def create_services(services)
-      response = connection.post services_path, services
+      response = connection.post services_path, services.to_json
       response.body
     end
 

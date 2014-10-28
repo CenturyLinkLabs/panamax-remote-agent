@@ -53,7 +53,7 @@ describe OrchestrationAdapter::Client do
     end
 
     it 'POSTs to /services' do
-      expect(connection).to receive(:post).with('services', services)
+      expect(connection).to receive(:post).with('services', services.to_json)
       subject.create_services(services)
     end
 
