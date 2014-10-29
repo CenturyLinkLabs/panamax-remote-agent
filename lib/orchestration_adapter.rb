@@ -1,6 +1,8 @@
 module OrchestrationAdapter
   class Client
 
+    API_VERSION = 'v1'
+
     attr_reader :connection
 
     def initialize(options={})
@@ -41,7 +43,7 @@ module OrchestrationAdapter
     end
 
     def services_path(*parts)
-      parts.unshift('services').join('/')
+      parts.unshift(API_VERSION, 'services').join('/')
     end
   end
 end

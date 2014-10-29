@@ -53,7 +53,7 @@ describe OrchestrationAdapter::Client do
     end
 
     it 'POSTs to /services' do
-      expect(connection).to receive(:post).with('services', services.to_json)
+      expect(connection).to receive(:post).with('v1/services', services.to_json)
       subject.create_services(services)
     end
 
@@ -72,7 +72,7 @@ describe OrchestrationAdapter::Client do
     end
 
     it 'GETs /services/:id' do
-      expect(connection).to receive(:get).with("services/#{service_id}")
+      expect(connection).to receive(:get).with("v1/services/#{service_id}")
       subject.get_service(service_id)
     end
 
@@ -92,7 +92,7 @@ describe OrchestrationAdapter::Client do
 
     it 'PUTs /services/:id' do
       expect(connection).to(
-        receive(:put).with("services/#{service_id}", desiredState: desired_state))
+        receive(:put).with("v1/services/#{service_id}", desiredState: desired_state))
       subject.update_service(service_id, desired_state)
     end
 
@@ -110,7 +110,7 @@ describe OrchestrationAdapter::Client do
     end
 
     it 'DELETEs /services/:id' do
-      expect(connection).to receive(:delete).with("services/#{service_id}")
+      expect(connection).to receive(:delete).with("v1/services/#{service_id}")
       subject.delete_service(service_id)
     end
 
