@@ -15,7 +15,8 @@ describe ImageSerializer do
       ],
       'volumes_from' => [
         { 'service' => 'svc1' }
-      ]
+      ],
+      'deployment' => { 'count' => '2' }
     )
   end
 
@@ -77,6 +78,11 @@ describe ImageSerializer do
     it 're-maps the volumes_from key' do
       serialized = subject.as_json
       expect(serialized[:volumesFrom]).to eq image.volumes_from
+    end
+
+    it 'converts deployment count to an integer' do
+      serialized = subject.as_json
+      expect(serialized[:deployment]).to eq count: 2
     end
   end
 end

@@ -36,4 +36,9 @@ class ImageSerializer < ActiveModel::Serializer
     object.volumes_from
   end
 
+  def deployment
+    object.deployment.each_with_object({}) do |(key, value), h|
+      h[key.to_sym] = (key == 'count') ? value.to_i : value
+    end
+  end
 end
