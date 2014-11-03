@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.5'
+gem 'rails', '4.1.7'
 gem 'puma', '2.8.2'
 gem 'faraday_middleware', '0.9.0'
 gem 'sqlite3', '1.3.9'
