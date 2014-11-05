@@ -8,8 +8,9 @@ describe ImageSerializer do
         { 'service' => 'a', 'alias' => 'b' }
       ],
       'ports' => [
-        { 'container_port' => 1111, 'host_port' => 2222, 'proto' => 'UDP' }
+        { 'container_port' => '1111', 'host_port' => '2222', 'proto' => 'UDP' }
       ],
+      'expose' => ['3333'],
       'volumes' => [
         { 'container_path' => 'a/b', 'host_path' => 'c/d' }
       ],
@@ -60,9 +61,18 @@ describe ImageSerializer do
       expect(serialized[:ports].count).to eq 1
       port = serialized[:ports].first
 
-      expect(port[:containerPort]).to eq image.ports.first['container_port']
-      expect(port[:hostPort]).to eq image.ports.first['host_port']
+      expect(port[:containerPort]).to eq image.ports.first['container_port'].to_i
+      expect(port[:hostPort]).to eq image.ports.first['host_port'].to_i
       expect(port[:protocol]).to eq image.ports.first['proto']
+    end
+
+    it 'translates exposed ports to integers' do
+      serialized = subject.as_json
+
+      expect(serialized[:expose].count).to eq 1
+      exposed_port = serialized[:expose].first
+
+      expect(exposed_port).to eq image.expose.first.to_i
     end
 
     it 're-maps the keys for any volumes' do
