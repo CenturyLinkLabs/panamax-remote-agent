@@ -64,7 +64,7 @@ describe OrchestrationAdapter::Client do
 
   describe '#get_service' do
 
-    let(:service_id) { 's1' }
+    let(:service_id) { 's 1' }
     let(:response) { double(:response, status: nil, body: 'FOO') }
 
     before do
@@ -72,7 +72,7 @@ describe OrchestrationAdapter::Client do
     end
 
     it 'GETs /services/:id' do
-      expect(connection).to receive(:get).with("v1/services/#{service_id}")
+      expect(connection).to receive(:get).with('v1/services/s%201')
       subject.get_service(service_id)
     end
 

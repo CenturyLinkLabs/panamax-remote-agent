@@ -50,8 +50,10 @@ module OrchestrationAdapter
       end
     end
 
-    def services_path(*parts)
-      parts.unshift(API_VERSION, 'services').join('/')
+    def services_path(id=nil)
+      parts = [API_VERSION, 'services']
+      parts << URI.escape(id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")) if id
+      parts.join('/')
     end
   end
 end
