@@ -66,6 +66,8 @@ class Deployment < ActiveRecord::Base
   def overall_status(service_status)
     if service_status.any? { |s| s['actualState'] == 'error' }
       :error
+    elsif service_status.any? { |s| s['actualState'] == 'not found' }
+      :error
     elsif service_status.any? { |s| s['actualState'] == 'stopped' }
       :stopped
     else

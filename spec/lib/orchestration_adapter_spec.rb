@@ -65,7 +65,7 @@ describe OrchestrationAdapter::Client do
   describe '#get_service' do
 
     let(:service_id) { 's1' }
-    let(:response) { double(:response, body: 'FOO') }
+    let(:response) { double(:response, status: nil, body: 'FOO') }
 
     before do
       connection.stub(:get).and_return(response)
@@ -76,8 +76,33 @@ describe OrchestrationAdapter::Client do
       subject.get_service(service_id)
     end
 
-    it 'returns the response body' do
-      expect(subject.get_service(service_id)).to eq response.body
+    context 'when response is good' do
+
+      let(:response) { double(:response, status: 200, body: 'FOO') }
+
+      it 'returns the response body' do
+        expect(subject.get_service(service_id)).to eq response.body
+      end
+    end
+
+    context 'when response is a not found error' do
+
+      let(:response) { double(:response, status: 404) }
+
+      it 'returns a not found message' do
+        expect(subject.get_service(service_id)).to eq(
+          'id' => service_id, 'actualState' => 'not found')
+      end
+    end
+
+    context 'when response is some other error' do
+
+      let(:response) { double(:response, status: 500) }
+
+      it 'returns a not found message' do
+        expect(subject.get_service(service_id)).to eq(
+          'id' => service_id, 'actualState' => 'error')
+      end
     end
   end
 

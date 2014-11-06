@@ -111,6 +111,7 @@ describe Deployment do
 
     let(:started_service) { { 'id' => 'z.svc', 'actualState' => 'started' } }
     let(:stopped_service) { { 'id' => 'z.svc', 'actualState' => 'stopped' } }
+    let(:notfound_service) { { 'id' => 'z.svc', 'actualState' => 'not found' } }
     let(:error_service) { { 'id' => 'z.svc', 'actualState' => 'error' } }
 
     before do
@@ -135,6 +136,18 @@ describe Deployment do
       before do
         client.stub(:get_service).with('a.svc').and_return(started_service)
         client.stub(:get_service).with('b.svc').and_return(error_service)
+      end
+
+      it 'returns an overall status of :error' do
+        expect(subject.status[:overall]).to eq :error
+      end
+    end
+
+    context 'when one of the services is not found' do
+
+      before do
+        client.stub(:get_service).with('a.svc').and_return(started_service)
+        client.stub(:get_service).with('b.svc').and_return(notfound_service)
       end
 
       it 'returns an overall status of :error' do

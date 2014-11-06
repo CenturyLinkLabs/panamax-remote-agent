@@ -19,7 +19,15 @@ module OrchestrationAdapter
 
     def get_service(service_id)
       response = connection.get services_path(service_id)
-      response.body
+
+      case response.status
+      when 200...300
+        response.body
+      when 404
+        { 'id' => service_id, 'actualState' => 'not found' }
+      else
+        { 'id' => service_id, 'actualState' => 'error' }
+      end
     end
 
     def update_service(service_id, desired_state)
