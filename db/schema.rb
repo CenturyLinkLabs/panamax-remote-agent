@@ -14,7 +14,9 @@
 ActiveRecord::Schema.define(version: 20140918192228) do
 
   create_table "deployments", force: true do |t|
-    t.text "service_ids"
+    t.string "name"
+    t.text   "template"
+    t.text   "service_ids"
   end
 
 end

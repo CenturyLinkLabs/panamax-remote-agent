@@ -11,6 +11,12 @@ describe Deployment do
     OrchestrationAdapter::Client.stub(:new).and_return(client)
   end
 
+  describe 'attributes' do
+    it { should respond_to :name }
+    it { should respond_to :template }
+    it { should respond_to :service_ids }
+  end
+
   describe '.deploy' do
 
     let(:template) { "images:\n- name: a\n  source: b\n- name: c\n  source: d" }
