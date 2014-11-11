@@ -66,6 +66,11 @@ describe Deployment do
     it 'persists the Deployment instance' do
       expect(described_class.deploy(template, override).persisted?).to eq true
     end
+
+    it 'persists the name of the template to the Deployment instance' do
+      template.name = 'foo'
+      expect(described_class.deploy(template, override).name).to eq template.name
+    end
   end
 
   describe '#stop' do
