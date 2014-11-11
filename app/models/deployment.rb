@@ -12,7 +12,7 @@ class Deployment < ActiveRecord::Base
       services = services_from_template(template)
       deployed_services = adapter_client.create_services(services)
 
-      create(service_ids: service_ids(deployed_services))
+      create(name: template.name, service_ids: service_ids(deployed_services))
     end
 
     private
@@ -47,6 +47,10 @@ class Deployment < ActiveRecord::Base
       overall: overall_status(service_status),
       services: service_status
     }
+  end
+
+  def name
+    self[:name] || 'Unnamed Deployment'
   end
 
   private
