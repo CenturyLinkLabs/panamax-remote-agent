@@ -71,10 +71,6 @@ describe Deployment do
       template.name = 'foo'
       expect(described_class.deploy(template, override).name).to eq template.name
     end
-
-    it 'returns a default for Deployment instances that have no name' do
-      expect(described_class.deploy(template, override).name).to eq 'Unnamed Deployment'
-    end
   end
 
   describe '#stop' do

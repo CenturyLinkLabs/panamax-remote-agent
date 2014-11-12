@@ -10,7 +10,7 @@ class Deployment < ActiveRecord::Base
       template.override(override)
 
       services = services_from_template(template)
-      deployed_services = [{'id' => 'foo.service'}] ##adapter_client.create_services(services)
+      deployed_services = adapter_client.create_services(services)
 
       create(name: template.name, service_ids: service_ids(deployed_services))
     end
@@ -47,10 +47,6 @@ class Deployment < ActiveRecord::Base
       overall: overall_status(service_status),
       services: service_status
     }
-  end
-
-  def name
-    self[:name] || 'Unnamed Deployment'
   end
 
   private
