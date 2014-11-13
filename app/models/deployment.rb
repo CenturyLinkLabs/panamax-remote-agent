@@ -26,7 +26,7 @@ class Deployment < ActiveRecord::Base
     end
 
     def adapter_client
-      OrchestrationAdapter::Client.new
+      OrchestrationAdapter::Client.new(logger: logger)
     end
   end
 
