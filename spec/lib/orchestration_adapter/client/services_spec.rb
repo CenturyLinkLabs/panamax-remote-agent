@@ -50,7 +50,9 @@ describe OrchestrationAdapter::Client do
 
     context 'when response is a not found error' do
 
-      let(:response) { double(:response, status: 404) }
+      before do
+        connection.stub(:get).and_raise(OrchestrationAdapter::NotFound)
+      end
 
       it 'returns a not found message' do
         expect(subject.get_service(service_id)).to eq(
@@ -60,7 +62,9 @@ describe OrchestrationAdapter::Client do
 
     context 'when response is some other error' do
 
-      let(:response) { double(:response, status: 500) }
+      before do
+        connection.stub(:get).and_raise(OrchestrationAdapter::Conflict)
+      end
 
       it 'returns a not found message' do
         expect(subject.get_service(service_id)).to eq(
@@ -102,8 +106,21 @@ describe OrchestrationAdapter::Client do
       subject.delete_service(service_id)
     end
 
-    it 'returns true' do
-      expect(subject.delete_service(service_id)).to eq true
+    context 'when the response is good' do
+      it 'returns true' do
+        expect(subject.delete_service(service_id)).to eq true
+      end
+    end
+
+    context 'when the response is an error' do
+
+      before do
+        connection.stub(:delete).and_raise(OrchestrationAdapter::NotFound)
+      end
+
+      it 'returns true' do
+        expect(subject.delete_service(service_id)).to eq true
+      end
     end
   end
 end

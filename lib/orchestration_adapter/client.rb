@@ -1,4 +1,5 @@
 require 'orchestration_adapter/middleware/response/detail_logger'
+require 'orchestration_adapter/middleware/response/raise_error'
 
 module OrchestrationAdapter
   class Client
@@ -21,6 +22,7 @@ module OrchestrationAdapter
       Faraday.new(url: url) do |faraday|
         faraday.request :json
         faraday.response :json
+        faraday.response :raise_error
         faraday.response :detail_logger, @logger
         faraday.adapter Faraday.default_adapter
       end
