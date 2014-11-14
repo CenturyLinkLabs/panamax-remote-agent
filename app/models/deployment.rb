@@ -39,13 +39,10 @@ class Deployment < ActiveRecord::Base
   end
 
   def status
-    service_status = service_ids.map do |service_id|
-      adapter_client.get_service(service_id)
-    end
-
     {
-      overall: overall_status(service_status),
-      services: service_status
+      services: service_ids.map do |service_id|
+        adapter_client.get_service(service_id)
+      end
     }
   end
 
@@ -60,18 +57,6 @@ class Deployment < ActiveRecord::Base
   def undeploy_services
     service_ids.each do |service_id|
       adapter_client.delete_service(service_id)
-    end
-  end
-
-  def overall_status(service_status)
-    if service_status.any? { |s| s['actualState'] == 'error' }
-      :error
-    elsif service_status.any? { |s| s['actualState'] == 'not found' }
-      :error
-    elsif service_status.any? { |s| s['actualState'] == 'stopped' }
-      :stopped
-    else
-      :started
     end
   end
 

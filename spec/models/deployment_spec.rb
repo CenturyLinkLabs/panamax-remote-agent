@@ -120,14 +120,12 @@ describe Deployment do
 
   describe '#status' do
 
-    let(:started_service) { { 'id' => 'z.svc', 'actualState' => 'started' } }
-    let(:stopped_service) { { 'id' => 'z.svc', 'actualState' => 'stopped' } }
-    let(:notfound_service) { { 'id' => 'z.svc', 'actualState' => 'not found' } }
-    let(:error_service) { { 'id' => 'z.svc', 'actualState' => 'error' } }
+    let(:service_a) { { 'id' => 'a.svc', 'actualState' => 'started' } }
+    let(:service_b) { { 'id' => 'b.svc', 'actualState' => 'stopped' } }
 
     before do
-      client.stub(:get_service).with('a.svc').and_return(stopped_service)
-      client.stub(:get_service).with('b.svc').and_return(error_service)
+      client.stub(:get_service).with('a.svc').and_return(service_a)
+      client.stub(:get_service).with('b.svc').and_return(service_b)
     end
 
     it 'retrieves the status for each deployment service' do
@@ -139,55 +137,8 @@ describe Deployment do
     end
 
     it 'returns the individual service status results' do
-      expect(subject.status[:services]).to eq [stopped_service, error_service]
+      expect(subject.status[:services]).to eq [service_a, service_b]
     end
 
-    context 'when one of the services is in the error state' do
-
-      before do
-        client.stub(:get_service).with('a.svc').and_return(started_service)
-        client.stub(:get_service).with('b.svc').and_return(error_service)
-      end
-
-      it 'returns an overall status of :error' do
-        expect(subject.status[:overall]).to eq :error
-      end
-    end
-
-    context 'when one of the services is not found' do
-
-      before do
-        client.stub(:get_service).with('a.svc').and_return(started_service)
-        client.stub(:get_service).with('b.svc').and_return(notfound_service)
-      end
-
-      it 'returns an overall status of :error' do
-        expect(subject.status[:overall]).to eq :error
-      end
-    end
-
-    context 'when one of the services is in the stopped state' do
-
-      before do
-        client.stub(:get_service).with('a.svc').and_return(started_service)
-        client.stub(:get_service).with('b.svc').and_return(stopped_service)
-      end
-
-      it 'returns an overall status of :stopped' do
-        expect(subject.status[:overall]).to eq :stopped
-      end
-    end
-
-    context 'when all of the services are in the started state' do
-
-      before do
-        client.stub(:get_service).with('a.svc').and_return(started_service)
-        client.stub(:get_service).with('b.svc').and_return(started_service)
-      end
-
-      it 'returns an overall status of :started' do
-        expect(subject.status[:overall]).to eq :started
-      end
-    end
   end
 end
