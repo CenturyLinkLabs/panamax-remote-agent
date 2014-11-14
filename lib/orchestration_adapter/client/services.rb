@@ -9,15 +9,11 @@ module OrchestrationAdapter::Client::Services
 
   def get_service(service_id)
     response = connection.get services_path(service_id)
-
-    case response.status
-    when 200...300
-      response.body
-    when 404
-      { 'id' => service_id, 'actualState' => 'not found' }
-    else
-      { 'id' => service_id, 'actualState' => 'error' }
-    end
+    response.body
+  rescue OrchestrationAdapter::NotFound => ex
+    { 'id' => service_id, 'actualState' => 'not found' }
+  rescue OrchestrationAdapter::Error => ex
+    { 'id' => service_id, 'actualState' => 'error' }
   end
 
   def update_service(service_id, desired_state)
@@ -27,6 +23,8 @@ module OrchestrationAdapter::Client::Services
 
   def delete_service(service_id)
     connection.delete services_path(service_id)
+    true
+  rescue OrchestrationAdapter::Error
     true
   end
 
