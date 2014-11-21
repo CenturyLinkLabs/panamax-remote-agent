@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.1.2 - 2014-11-21
+------------------
+### Added
+- Improved error handling and logging (#17)
+
+### Removed
+- Overall status rollup for a deployment (#18)
+
 0.1.1 - 2014-11-13
 ------------------
 ### Added
