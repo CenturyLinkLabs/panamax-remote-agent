@@ -13,6 +13,6 @@ class MetadataController < ApplicationController
 protected
 
   def client
-    @client ||= OrchestrationAdapter::Client.new
+    @client ||= OrchestrationAdapter::Client.new(logger: logger)
   end
 end
