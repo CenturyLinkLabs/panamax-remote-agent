@@ -6,13 +6,13 @@ class Deployment < ActiveRecord::Base
 
   class << self
 
-    def deploy(template, override)
-      template.override(override)
+    def deploy(template, override=nil)
+      template.override(override) if override
 
       services = services_from_template(template)
       deployed_services = adapter_client.create_services(services)
 
-      create(name: template.name, service_ids: service_ids(deployed_services))
+      create(name: template.name, template: template.to_json, service_ids: service_ids(deployed_services))
     end
 
     private
@@ -44,6 +44,10 @@ class Deployment < ActiveRecord::Base
         adapter_client.get_service(service_id)
       end
     }
+  end
+
+  def redeployable?
+    template?
   end
 
   private

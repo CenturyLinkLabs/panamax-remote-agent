@@ -22,3 +22,4 @@
 en:
   hello: "Hello world"
   adapter_connection_error: "Adapter service is not responding"
+  not_redeployable_error: "%{deployment} cannot be redeployed"

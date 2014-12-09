@@ -38,9 +38,18 @@ describe Deployment do
       client.stub(:create_services).and_return(deployed_services)
     end
 
-    it 'overrides the template with the deployment descriptor' do
-      expect(template).to receive(:override).with(override)
-      described_class.deploy(template, override)
+    context 'when an override is provided' do
+      it 'overrides the template with the deployment descriptor' do
+        expect(template).to receive(:override).with(override)
+        described_class.deploy(template, override)
+      end
+    end
+
+    context 'when an override is not provided' do
+      it 'does not override the template' do
+        expect(template).not_to receive(:override).with(override)
+        described_class.deploy(template)
+      end
     end
 
     it 'calls create_services on the client' do
@@ -70,6 +79,10 @@ describe Deployment do
     it 'persists the name of the template to the Deployment instance' do
       template.name = 'foo'
       expect(described_class.deploy(template, override).name).to eq template.name
+    end
+
+    it 'persists the json representation of the template to the Deployment instance' do
+      expect(described_class.deploy(template).template).to eq template.to_json
     end
   end
 
@@ -140,5 +153,22 @@ describe Deployment do
       expect(subject.status[:services]).to eq [service_a, service_b]
     end
 
+  end
+
+  describe '#redeployable?' do
+    context 'when the deployment has no template' do
+      it 'is not redeployable?' do
+        expect(subject.redeployable?).to be false
+      end
+    end
+
+    context 'when the deployment has a template' do
+      before do
+        subject.template = "I'm a little template short and stout"
+      end
+      it 'is not redeployable?' do
+        expect(subject.redeployable?).to be true
+      end
+    end
   end
 end

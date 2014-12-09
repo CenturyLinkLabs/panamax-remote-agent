@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DeploymentDetailSerializer do
+describe DeploymentSerializer do
   let(:deployment_model) { Deployment.new }
 
   it 'exposes the attributes to be jsonified' do
@@ -8,7 +8,7 @@ describe DeploymentDetailSerializer do
     expected_keys = [
       :id,
       :name,
-      :status,
+      :service_ids,
       :redeployable
     ]
     expect(serialized.keys).to match_array expected_keys

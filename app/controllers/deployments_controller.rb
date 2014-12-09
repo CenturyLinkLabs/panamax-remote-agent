@@ -21,4 +21,16 @@ class DeploymentsController < ApplicationController
   def destroy
     respond_with Deployment.find(params[:id]).destroy
   end
+
+  def redeploy
+    deployment = Deployment.find(params[:id])
+    if deployment.redeployable?
+      deployment.destroy
+      template_attrs = JSON.parse(deployment.template)
+      template = Template.new(template_attrs)
+      respond_with Deployment.deploy(template)
+    else
+      raise t(:not_redeployable_error, deployment: deployment.name)
+    end
+  end
 end
