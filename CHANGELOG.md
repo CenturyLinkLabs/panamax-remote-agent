@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+0.1.4 - 2014-12-17
+------------------
+### Added
+- Adding redeployment of existing deployments (#22)
+
+### Fixed
+- Link to contribution guide
+
 0.1.3 - 2014-12-1
 ------------------
 ### Added
