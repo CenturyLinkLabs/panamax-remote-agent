@@ -1,3 +1,7 @@
+## NOTE
+
+This repo is no longer being maintained. Users are welcome to fork it, but we make no warranty of its functionality.
+
 [![](https://badge.imagelayers.io/centurylink/panamax-remote-agent-ruby.svg)](https://imagelayers.io/?images=centurylink/panamax-remote-agent-ruby:latest 'Get your own badge on imagelayers.io')
 
 ![Panamax - Docker Management for Humans](http://panamax.ca.tier3.io/panamax_ui_wiki_screens/panamax_logo-title.png)
