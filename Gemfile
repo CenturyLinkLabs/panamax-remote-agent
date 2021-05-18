@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '4.1.7'
-gem 'puma', '2.8.2'
+gem 'puma', '4.3.8'
 gem 'faraday_middleware', '0.9.0'
 gem 'sqlite3', '1.3.9'
 gem 'active_model_serializers', '0.9.0'
